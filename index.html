@@ -57,8 +57,8 @@
     </div>
     <div id="gameArea">
         <div class="rope"></div>
-        <div class="player" id="player1" style="left: 100px;">Player 1</div>
-        <div class="player" id="player2" style="right: 100px;">Player 2</div>
+        <div class="player" id="player1" style="left: 100px;"></div>
+        <div class="player" id="player2" style="right: 100px;"></div>
     </div>
     <div id="winnerPage">
         <h2 id="winnerMessage"></h2>
@@ -82,14 +82,18 @@
             document.getElementById('player2Id').innerText = `Player 2: ${playerIds[1]}`;
         });
 
-        document.addEventListener('keydown', (event) => {
+        function handleSpacePress(event) {
             if (event.code === 'Space') {
                 socket.emit('moveRope', playerId);
                 const player = document.getElementById(playerId === players[0] ? 'player1' : 'player2');
                 const currentLeft = parseInt(player.style.left) || 0;
                 player.style.left = (currentLeft + (playerId === players[0] ? -20 : 20)) + 'px';
+                // Disable further movement until the space key is pressed again
+                document.removeEventListener('keydown', handleSpacePress);
             }
-        });
+        }
+
+        document.addEventListener("keyup", handleSpacePress);
 
         socket.on('updateRope', (direction) => {
             const rope = document.querySelector('.rope');
