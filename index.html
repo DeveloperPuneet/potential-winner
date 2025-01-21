@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thug of War Game</title>
     <style>
+        *{
+            transition: all 0.4s linear;
+        }
         body {
             display: flex;
             flex-direction: column;
@@ -57,8 +60,8 @@
     </div>
     <div id="gameArea">
         <div class="rope"></div>
-        <div class="player" id="player1" style="left: 100px;"></div>
-        <div class="player" id="player2" style="right: 100px;"></div>
+        <div class="player" id="player1" style="left: 100px;">p1</div>
+        <div class="player" id="player2" style="right: 100px;">p2</div>
     </div>
     <div id="winnerPage">
         <h2 id="winnerMessage"></h2>
