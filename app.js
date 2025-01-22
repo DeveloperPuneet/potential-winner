@@ -48,16 +48,32 @@ io.on('connection', (socket) => {
 
     socket.on('moveRope', (playerId) => {
         const direction = rooms[roomId][0] === playerId ? 'left' : 'right';
-        const playerIndex = rooms[roomId].indexOf(playerId);
-        const playerOffset = playerIndex === 0 ? -20 : 20; // Move left for player 1, right for player 2
         io.to(roomId).emit('updateRope', direction);
-        io.to(roomId).emit('movePlayer', { playerId, offset: playerOffset });
     });
 
     socket.on('restartGame', () => {
         rooms[roomId] = [];
         io.to(roomId).emit('restart');
     });
+
+    // Check if only one player is in the room
+    if (rooms[roomId].length === 1) {
+        setTimeout(() => {
+            // If no second player has joined, assign a bot
+            if (rooms[roomId].length === 1) {
+                const botId = 'bot'; // Identifier for the bot
+                rooms[roomId].push(botId);
+                socket.join(roomId);
+                io.to(roomId).emit('playerConnected', rooms[roomId]);
+                io.to(roomId).emit('botAssigned', botId); // Notify players that a bot has joined
+
+                // Simulate bot pressing space bar at faster random intervals
+                setInterval(() => {
+                    io.to(roomId).emit('botPressSpace', botId);
+                }, Math.random() * 500); 
+            }
+        }, 5000); 
+    }
 
     socket.on('disconnect', () => {
         console.log('User disconnected:', socket.id);
