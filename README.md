@@ -36,6 +36,7 @@ Open your browser and navigate to `http://localhost:3000` to play the game.
 - Room management for up to two players
 - Ability to make moves and restart the game
 - Handles player connections and disconnections
+- COmputer bot player is also avalible 
 
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
