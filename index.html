@@ -125,11 +125,14 @@
 
         function handleSpacePress(event) {
             if (event.code === 'Space') {
-                socket.emit('moveRope', playerId);
+            socket.emit('moveRope', playerId);
             }
         }
+        function clickListener(){
+            socket.emit('moveRope', playerId);
+        }
 
-        document.addEventListener("click", handleSpacePress);
+        document.addEventListener("click", clickListener);
         document.addEventListener("keyup", handleSpacePress);
 
         socket.on('updateRope', (direction) => {
@@ -165,12 +168,6 @@
             document.getElementById('gameArea').style.display = 'none';
             document.getElementById('winnerPage').style.display = 'block';
         }
-
-        document.getElementById('restartButton').addEventListener('click', () => {
-            socket.emit('restartGame');
-            document.getElementById('winnerPage').style.display = 'none';
-            document.getElementById('waitingRoom').style.display = 'flex';
-        });
     </script>
 </body>
 
