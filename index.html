@@ -130,6 +130,7 @@
         }
 
         document.addEventListener("keyup", handleSpacePress);
+        document.addEventListener("click", handleSpacePress)
 
         socket.on('updateRope', (direction) => {
             const rope = document.querySelector('.rope');
