@@ -72,7 +72,7 @@ io.on('connection', (socket) => {
                     io.to(roomId).emit('botPressSpace', botId);
                 }, Math.random() * 800); 
             }
-        }, 5000); 
+        }, 15000); 
     }
 
     socket.on('disconnect', () => {
