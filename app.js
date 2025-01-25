@@ -70,7 +70,7 @@ io.on('connection', (socket) => {
                 // Simulate bot pressing space bar at faster random intervals
                 setInterval(() => {
                     io.to(roomId).emit('botPressSpace', botId);
-                }, Math.random() * 800); 
+                }, Math.random() * 500); 
             }
         }, 15000); 
     }
