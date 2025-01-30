@@ -2,10 +2,20 @@ const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
+const randomstring = require('randomstring');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
+
+const randomStringgenerator = async (req, res) => {
+    try {
+        return randomstring.generate(20)
+    } catch (error) {
+        console.log(error.message);;
+
+    }
+}
 
 // Serve static files if needed
 app.use(express.static('public'));
@@ -17,8 +27,7 @@ app.get("/", (req, res) => {
 let rooms = {};
 
 // Socket.IO connection
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
+io.on('connection', async (socket) => {
 
     // Check for existing rooms
     const roomKeys = Object.keys(rooms);
@@ -33,7 +42,8 @@ io.on('connection', (socket) => {
 
     // If no room is available, create a new one
     if (!roomId) {
-        roomId = `room_${roomKeys.length + 1}`;
+        let roomName = await randomStringgenerator();
+        roomId = `room_${roomName}`;
         rooms[roomId] = [];
     }
 
@@ -70,13 +80,12 @@ io.on('connection', (socket) => {
                 // Simulate bot pressing space bar at faster random intervals
                 setInterval(() => {
                     io.to(roomId).emit('botPressSpace', botId);
-                }, Math.random() * 500); 
+                }, Math.random() * 500);
             }
-        }, 15000); 
+        }, 15000);
     }
 
     socket.on('disconnect', () => {
-        console.log('User disconnected:', socket.id);
         rooms[roomId] = rooms[roomId].filter(id => id !== socket.id);
     });
 });
