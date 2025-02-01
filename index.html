@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -29,8 +30,14 @@
     <div id="winnerPage">
         <h2 id="winnerMessage"></h2>
     </div>
+    <div class="footer">
+        <p id="special-text">Made with Creativity & Caffeine</p>
+        <a href="https://github.com/DeveloperPuneet/potential-winner" target="_blank" class="git-icon"><i
+                class="fa-brands fa-github"></i></a>
+    </div>
+    <script src="https://kit.fontawesome.com/45c7c9c055.js" crossorigin="anonymous"></script>
     <script src="/socket.io/socket.io.js"></script>
-        <script>
+    <script>
         const socket = io();
         let playerId;
 
@@ -53,10 +60,10 @@
 
         function handleSpacePress(event) {
             if (event.code === 'Space') {
-            socket.emit('moveRope', playerId);
+                socket.emit('moveRope', playerId);
             }
         }
-        function clickListener(){
+        function clickListener() {
             socket.emit('moveRope', playerId);
         }
 
@@ -96,6 +103,22 @@
             document.getElementById('gameArea').style.display = 'none';
             document.getElementById('winnerPage').style.display = 'block';
         }
+        const phrases = [
+            "Crafted with ☕ & Code",
+            "Built with Passion & Pixels",
+            "Made with Creativity & Caffeine",
+            "Assembled with Logic & Love",
+            "Born from Code & Curiosity",
+            "Powered by Dreams & Databases",
+            "Developed with 💡 & Debugging",
+            "Engineered with 🍋 & Innovation",
+            "Designed for You, Debugged by Me",
+            "Baked with 🍪 & a Bit of Chaos"
+        ];
+        setInterval(() => {
+            document.getElementById("special-text").textContent =
+                phrases[Math.floor(Math.random() * phrases.length)];
+        }, 5000);
     </script>
 </body>
 

@@ -71,7 +71,8 @@ io.on('connection', async (socket) => {
         setTimeout(() => {
             // If no second player has joined, assign a bot
             if (rooms[roomId].length === 1) {
-                const botId = 'bot'; // Identifier for the bot
+                const botid = randomStringgenerator();
+                const botId = 'bot'+botid; // Identifier for the bot
                 rooms[roomId].push(botId);
                 socket.join(roomId);
                 io.to(roomId).emit('playerConnected', rooms[roomId]);
