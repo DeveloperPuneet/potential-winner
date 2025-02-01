@@ -24,10 +24,10 @@ app.get("/", (req, res) => {
 
 // Store connected players
 let rooms = {};
-let botInterval;
 
 // Socket.IO connection
 io.on('connection', async (socket) => {
+    let botInterval; // Declare botInterval inside the connection handler
 
     // Check for existing rooms
     const roomKeys = Object.keys(rooms);
@@ -96,7 +96,7 @@ io.on('connection', async (socket) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Build Completed`);
 });
