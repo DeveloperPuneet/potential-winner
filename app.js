@@ -8,12 +8,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const randomStringgenerator = async (req, res) => {
+const randomStringgenerator = async () => {
     try {
-        return randomstring.generate(20)
+        return randomstring.generate(20);
     } catch (error) {
-        console.log(error.message);;
-
+        console.log(error.message);
     }
 }
 
@@ -25,6 +24,7 @@ app.get("/", (req, res) => {
 
 // Store connected players
 let rooms = {};
+let botInterval;
 
 // Socket.IO connection
 io.on('connection', async (socket) => {
@@ -68,18 +68,18 @@ io.on('connection', async (socket) => {
 
     // Check if only one player is in the room
     if (rooms[roomId].length === 1) {
-        setTimeout(() => {
+        setTimeout(async () => {
             // If no second player has joined, assign a bot
             if (rooms[roomId].length === 1) {
-                const botid = randomStringgenerator();
-                const botId = 'bot'+botid; // Identifier for the bot
+                const botid = await randomStringgenerator();
+                const botId = 'bot' + botid; // Identifier for the bot
                 rooms[roomId].push(botId);
                 socket.join(roomId);
                 io.to(roomId).emit('playerConnected', rooms[roomId]);
                 io.to(roomId).emit('botAssigned', botId); // Notify players that a bot has joined
 
                 // Simulate bot pressing space bar at faster random intervals
-                setInterval(() => {
+                botInterval = setInterval(() => {
                     io.to(roomId).emit('botPressSpace', botId);
                 }, Math.random() * 500);
             }
@@ -88,6 +88,10 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', () => {
         rooms[roomId] = rooms[roomId].filter(id => id !== socket.id);
+        // Disconnect any bots in the room if a user disconnects
+        clearInterval(botInterval); // Clear the bot's interval
+        rooms[roomId] = rooms[roomId].filter(id => !id.startsWith('bot'));
+        io.to(roomId).emit('botDisconnected'); // Notify players that the bot has been disconnected
     });
 });
 
