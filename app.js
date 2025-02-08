@@ -81,7 +81,7 @@ io.on('connection', async (socket) => {
                 // Simulate bot pressing space bar at faster random intervals
                 botInterval = setInterval(() => {
                     io.to(roomId).emit('botPressSpace', botId);
-                }, Math.random() * 500);
+                }, (Math.random() * 500) + 300);
             }
         }, 15000);
     }
